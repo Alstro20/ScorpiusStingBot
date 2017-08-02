@@ -32,10 +32,14 @@ async def on_message(message):
         await client.close()
         print("Shutdown") 
     
-    #fuck        
+    #Command to ping the bot (again)
     if message.content.startswith(prefix+'greet'):
         await client.send_message(message.channel, 'Hello!')
         print("Hello!")        
         
-    
+    #Command to DM a user that requests it
+    if message.content.startswith(prefix+'dm'):
+        await client.send_message(message.author, 'Slidin into the DMs ;)')
+        print("sent a message")
+        
 client.run('MzQyMzM0NzE2MTM5MTQzMTY5.DGOHmA.fHEu372uduE5hwGZ7vjFzS0BmJQ')
