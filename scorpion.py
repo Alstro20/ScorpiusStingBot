@@ -7,6 +7,7 @@ client = discord.Client()
 
 #Runs before bot starts
 print("Starting bot")
+print("DEV VERSION MIGHT NOT BE STABLE")
 
 prefix = 's!'
 
@@ -68,7 +69,7 @@ async def on_message(message):
     
     #Lets user know if script is unknown. Put all commands before this.
     elif message.content.startswith(prefix):
-        await client.send_message(message.channel, 'Message unknown')  
+        await client.send_message(message.channel, 'Invalid Command')  
 
         
 client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
