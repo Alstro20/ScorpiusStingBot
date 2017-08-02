@@ -5,14 +5,18 @@ import time
 
 client = discord.Client()
 
-#Runs before bot starts
+#[---PRE-BOOT---]
 print("Starting bot")
 print("DEV VERSION MIGHT NOT BE STABLE")
 
 prefix = 's!'
 
+#[---USER INPUT---]
 async def reddit(message):
     await client.send_message(message.channel, 'https://www.reddit.com/r/'+ message.content[(len(prefix)+7):])
+    
+async def say(message):
+    await client.send_message(message.channel, message.content[(len(prefix)+3):])
 
 #Bot comes online
 @client.event
@@ -22,7 +26,7 @@ async def on_ready():
     print(client.user.id)
     print('------')
    
-#Bot checks for messages being sent
+#[---COMMANDS---]
 @client.event
 async def on_message(message):
     #Command to respond with "Pong!" (For testing)
@@ -64,6 +68,12 @@ async def on_message(message):
         await client.send_message(message.author, "Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at https://github.com/Alstro20/ScorpiusStingBot")
         await client.send_message(message.channel, message.author, "Send you a DM")
         print("Info sent to", message.author) 
+        
+    #Command to make the bot say whatever
+    elif message.content.startswith(prefix+'say'):
+        await client.delete_message(message)
+        await say(message)
+        print("Said something")
         
         
     
