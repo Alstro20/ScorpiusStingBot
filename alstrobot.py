@@ -4,7 +4,7 @@ from discord.enums import Status
 
 client = discord.Client()
 
-prefix = 'a!'
+prefix = 's!'
 
 @client.event
 async def on_ready():
