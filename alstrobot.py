@@ -25,9 +25,10 @@ async def on_message(message):
     #Command to shut down the bot
     if message.content.startswith(prefix+'shutdown'):
         await client.send_message(message.channel, 'Shutting down')
-        await client.change_status(None, Status.invisible)
+        await client.change_presence(game=None,status=None,afk=False)
         await client.close()
-        print("Shutdown")  
+        print("Shutdown") 
+    
     #fuck        
     if messsage.content.startswith(prefix+'greet'):
         await client.send_message(message.channel, 'Hello!')
