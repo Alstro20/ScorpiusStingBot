@@ -2,14 +2,14 @@ import discord
 import asyncio
 from discord.enums import Status
 import time
+from builtins import int
 
 client = discord.Client()
 
+#Runs before bot starts
+print("Starting bot")
+
 prefix = 's!'
-
-
-async def reddit(message):
-    await client.send_message(message.channel, 'https://www.reddit.com/r/'+ message.content[(len(prefix)+7):])
 
 #Bot comes online
 @client.event
@@ -22,7 +22,7 @@ async def on_ready():
 #Bot checks for messages being sent
 @client.event
 async def on_message(message):
-    #Ping
+    #Command to respond with "Pong!" (For testing)
     if message.content.startswith(prefix+'ping'):
         await client.send_message(message.channel, 'Pong!')
         print("Pong!")
@@ -33,7 +33,7 @@ async def on_message(message):
         await client.change_presence(game=None,status=None,afk=False)
         #sleep for 2 seconds before shutdown, just to make sure status changed correctly
         time.sleep(2)
-        await client.close()
+        await client.logout()
         print("Shutdown") 
     
     #Command to ping the bot (again)
@@ -44,9 +44,15 @@ async def on_message(message):
     #Command to DM a user that requests it
     if message.content.startswith(prefix+'dm'):
         await client.send_message(message.author, 'Slidin into the DMs ;)')
-        await client.send_message(message.channel, 'Sent you a message')
         print("sent a message")
-    #command to link to a specified subreddit
-    elif message.content.startswith(prefix+'reddit'):
-        await reddit(message)
+        
+    #Command to generate an invite
+    if message.content.startswith(prefix+'invite'):
+        await client.send_message(message.channel, await client.create_invite(message.channel))
+        print("Created server invite")
+        
+    #Command to purge messages
+    
+        
+        
 client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
