@@ -27,7 +27,11 @@ async def on_message(message):
         await client.send_message(message.channel, 'Shutting down')
         await client.change_status(None, Status.invisible)
         await client.close()
-        print("Shutdown")
+        print("Shutdown")  
+    #fuck        
+    if messsage.content.startswith(prefix+'greet'):
+        await client.send_message(message.channel, 'Hello!')
+        print("Hello!")        
+        
     
-
 client.run('MzQyMzM0NzE2MTM5MTQzMTY5.DGOHmA.fHEu372uduE5hwGZ7vjFzS0BmJQ')
