@@ -30,7 +30,7 @@ async def on_message(message):
         print("Shutdown") 
     
     #fuck        
-    if messsage.content.startswith(prefix+'greet'):
+    if message.content.startswith(prefix+'greet'):
         await client.send_message(message.channel, 'Hello!')
         print("Hello!")        
         
