@@ -2,8 +2,12 @@ import discord
 import asyncio
 from discord.enums import Status
 import time
+from builtins import int
 
 client = discord.Client()
+
+#Runs before bot starts
+print("Starting bot")
 
 prefix = 's!'
 
@@ -41,5 +45,11 @@ async def on_message(message):
     if message.content.startswith(prefix+'dm'):
         await client.send_message(message.author, 'Slidin into the DMs ;)')
         print("sent a message")
+        
+    #Command to generate an invite
+    if message.content.startswith(prefix+'invite'):
+        await client.send_message(message.channel, await client.create_invite(message.channel))
+        print("Created server invite")
+        
         
 client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
