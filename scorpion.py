@@ -3,8 +3,16 @@ import asyncio
 from discord.enums import Status
 import time
 
+#Allows importing of other Python scripts
+__import__
+from builtins import __import__
+
+#Python scripts to include
+import include
+
 client = discord.Client()
 
+#Bot's prefix. Can be changed here.
 prefix = 's!'
 
 #Bot comes online
@@ -27,14 +35,13 @@ async def on_message(message):
     if message.content.startswith(prefix+'shutdown'):
         await client.send_message(message.channel, 'Shutting down')
         await client.change_presence(game=None,status=None,afk=False)
-        #sleep for 2 seconds before shutdown, just to make sure status changed correctly
         time.sleep(2)
         await client.close()
         print("Shutdown") 
     
-    #fuck        
-    if message.content.startswith(prefix+'greet'):
-        await client.send_message(message.channel, 'Hello!')
+    #Testing function        
+    if message.content.startswith(prefix+'test'):
+        await client.send_message(message.channel, TestingIncludeString)
         print("Hello!")        
         
     
