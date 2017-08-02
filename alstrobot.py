@@ -1,6 +1,7 @@
 import discord
 import asyncio
 from discord.enums import Status
+import time
 
 client = discord.Client()
 
@@ -26,6 +27,8 @@ async def on_message(message):
     if message.content.startswith(prefix+'shutdown'):
         await client.send_message(message.channel, 'Shutting down')
         await client.change_presence(game=None,status=None,afk=False)
+        #sleep for 2 seconds before shutdown, just to make sure status changed correctly
+        time.sleep(2)
         await client.close()
         print("Shutdown") 
     
