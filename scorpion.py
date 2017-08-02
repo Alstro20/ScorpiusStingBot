@@ -2,7 +2,6 @@ import discord
 import asyncio
 from discord.enums import Status
 import time
-from builtins import int
 
 client = discord.Client()
 
@@ -53,10 +52,14 @@ async def on_message(message):
     if message.content.startswith(prefix+'invite'):
         await client.send_message(message.channel, await client.create_invite(message.channel))
         print("Created server invite")
-	
-    #command to link to a specified subreddit
+    
+    #Command to link to a specified subreddit
     elif message.content.startswith(prefix+'reddit'):
-        await reddit(message)	
+        await reddit(message) 
+      
+    #Command to give information about the bot  
+    elif message.content.startswith(prefix+'info'):
+        await client.send_message(message.author, "Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at https://github.com/Alstro20/ScorpiusStingBot")   
 
-		
+        
 client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
