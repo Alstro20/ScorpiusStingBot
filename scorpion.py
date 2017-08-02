@@ -50,9 +50,6 @@ async def on_message(message):
     if message.content.startswith(prefix+'invite'):
         await client.send_message(message.channel, await client.create_invite(message.channel))
         print("Created server invite")
-        
-    #Command to purge messages
-    
-        
-        
+
+		
 client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
