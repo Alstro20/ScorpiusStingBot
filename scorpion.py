@@ -42,4 +42,4 @@ async def on_message(message):
         await client.send_message(message.author, 'Slidin into the DMs ;)')
         print("sent a message")
         
-client.run('MzQyMzM0NzE2MTM5MTQzMTY5.DGOHmA.fHEu372uduE5hwGZ7vjFzS0BmJQ')
+client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
