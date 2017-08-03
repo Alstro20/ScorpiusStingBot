@@ -73,7 +73,7 @@ async def on_message(message):
     #Command to give information about the bot  
     elif message.content.startswith(prefix+'info'):
         await client.send_message(message.author, "Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at https://github.com/Alstro20/ScorpiusStingBot")
-        await client.send_message(message.channel, message.author, "Send you a DM")
+        await client.send_message(message.channel, "Sent you a DM, "+message.author.mention)
         print("Info sent to", message.author) 
         
     #Command to make the bot say whatever
