@@ -1,17 +1,23 @@
 import discord
 import asyncio
-from discord.enums import Status
 import time
+#allows import of other python scripts
+from builtins import __import__
+__import__
+
+#import other python scripts
+import key
+from key import BotString
+
+
 
 client = discord.Client()
 
-#Runs before bot starts
+#[---PRE-BOOT---]
 print("Starting bot")
+print("DEV VERSION MIGHT NOT BE STABLE")
 
 prefix = 's!'
-
-async def reddit(message):
-    await client.send_message(message.channel, 'https://www.reddit.com/r/'+ message.content[(len(prefix)+7):])
 
 #Bot comes online
 @client.event
@@ -21,9 +27,15 @@ async def on_ready():
     print(client.user.id)
     print('------')
    
-#Bot checks for messages being sent
+#[---COMMANDS---]
 @client.event
 async def on_message(message):
+    #Command's contents are stored in commandContents
+    if message.content.startswith(prefix):
+        commandString = message.content
+        commandContents = commandString.split(' ', 1)[-1]
+        
+    
     #Command to respond with "Pong!" (For testing)
     if message.content.startswith(prefix+'ping'):
         await client.send_message(message.channel, 'Pong!')
@@ -55,7 +67,7 @@ async def on_message(message):
     
     #Command to link to a specified subreddit
     elif message.content.startswith(prefix+'reddit'):
-        await reddit(message) 
+        await client.send_message(message.channel, 'https://www.reddit.com/r/'+commandContents)
         print("Reddit")
       
     #Command to give information about the bot  
@@ -64,6 +76,12 @@ async def on_message(message):
         await client.send_message(message.channel, message.author, "Send you a DM")
         print("Info sent to", message.author) 
         
+    #Command to make the bot say whatever
+    elif message.content.startswith(prefix+'say'):
+        await client.delete_message(message)
+        await client.send_message(message.channel, commandContents)
+        print("Said - ", commandContents, " - at the request of", message.author)
+        
         
     
     #Lets user know if script is unknown. Put all commands before this.
@@ -71,4 +89,4 @@ async def on_message(message):
         await client.send_message(message.channel, 'Invalid Command')  
 
         
-client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
+client.run(BotString)
