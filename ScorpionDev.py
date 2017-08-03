@@ -3,21 +3,27 @@ import asyncio
 import time
 #allows import of other python scripts
 from builtins import __import__
+from _ast import Await
 __import__
+from googleapiclient.discovery import build
 
 #import other python scripts
 import key
-from key import BotString
-
+from key import BotString, APIKey, SearchEngineID
 
 
 client = discord.Client()
 
 #[---PRE-BOOT---]
 print("Starting bot")
-print("DEV VERSION MIGHT NOT BE STABLE")
 
 prefix = 's!'
+
+
+def google_search(query, api_key, cse_id, **kwargs):
+    service = build("customsearch", "v1", developerKey=api_key)
+    res = service.cse().list(q=query, cx=cse_id, **kwargs).execute()
+    return res['items']
 
 #Bot comes online
 @client.event
@@ -82,7 +88,12 @@ async def on_message(message):
         await client.send_message(message.channel, commandContents)
         print("Said - ", commandContents, " - at the request of", message.author)
         
-        
+    #Command to make the bot google search
+    elif message.content.startswith(prefix+'google'):
+        results = google_search(commandContents, APIKey, SearchEngineID, num = 3)
+        for result in results:
+            print("google")
+            await client.send_message(message.channel, result['link'])
     
     #Lets user know if script is unknown. Put all commands before this.
     elif message.content.startswith(prefix):
