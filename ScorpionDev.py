@@ -1,14 +1,21 @@
 import discord
 import asyncio
-from discord.enums import Status
 import time
+#allows import of other python scripts
+from builtins import __import__
+__import__
+
+#import other python scripts
+import key
+from key import BotString
+
+
 
 client = discord.Client()
 
 #[---PRE-BOOT---]
 print("Starting bot")
 print("DEV VERSION MIGHT NOT BE STABLE")
-
 
 prefix = 's!'
 
@@ -66,14 +73,14 @@ async def on_message(message):
     #Command to give information about the bot  
     elif message.content.startswith(prefix+'info'):
         await client.send_message(message.author, "Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at https://github.com/Alstro20/ScorpiusStingBot")
-        await client.send_message(message.channel, "Sent you a DM, "+message.author.mention)
+        await client.send_message(message.channel, message.author, "Send you a DM")
         print("Info sent to", message.author) 
         
     #Command to make the bot say whatever
     elif message.content.startswith(prefix+'say'):
         await client.delete_message(message)
         await client.send_message(message.channel, commandContents)
-        print("Said something")
+        print("Said - ", commandContents, " - at the request of", message.author)
         
         
     
@@ -82,4 +89,4 @@ async def on_message(message):
         await client.send_message(message.channel, 'Invalid Command')  
 
         
-client.run('TOKEN')
+client.run(BotString)
