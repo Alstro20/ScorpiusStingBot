@@ -15,7 +15,6 @@ client = discord.Client()
 
 #[---PRE-BOOT---]
 print("Starting bot")
-print("DEV VERSION MIGHT NOT BE STABLE")
 
 prefix = 's!'
 
