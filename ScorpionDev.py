@@ -82,4 +82,4 @@ async def on_message(message):
         await client.send_message(message.channel, 'Invalid Command')  
 
         
-client.run('MzQyMzc5OTg5MDk1Njc3OTUz.DGOxug.wbSojJmHCDlq6Z0t70za4ZjWyzA')
+client.run('TOKEN')
