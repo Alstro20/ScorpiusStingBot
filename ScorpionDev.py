@@ -18,6 +18,10 @@ client = discord.Client()
 print("Starting bot")
 
 prefix = 's!'
+adminPrefix = 's@'
+
+#List of users who are allowed to use admin commands
+adminList = ['211292458208854016','194525718300983296']
 
 
 def google_search(query, api_key, cse_id, **kwargs):
@@ -47,15 +51,20 @@ async def on_message(message):
         #Command to respond with "Pong!" (For testing)
         if message.content.startswith(prefix+'ping'):
             await client.send_message(message.channel, 'Pong!')
-            print("Pong!", message.author)
+            #Pring "Pong!" alongside the user's username and ID
+            print("Pong!", message.author, message.author.id)
             
         #Command to shut down the bot
-        elif message.content.startswith(prefix+'shutdown'):
-            await client.send_message(message.channel, 'Shutting down...')
-            await client.change_presence(game=None,status=None,afk=False)
-            time.sleep(2) # sleep for 2 seconds before shutdown, just to make sure status changed correctly
-            await client.logout()
-            print("Shutting down at", message.author, "'s request") 
+        elif message.content.startswith(adminPrefix+'shutdown'):
+            if message.author.id in adminList:
+                await client.send_message(message.channel, 'Shutting down...')
+                await client.change_presence(game=None,status=None,afk=False)
+                time.sleep(2) # sleep for 2 seconds before shutdown, just to make sure status changed correctly
+                await client.logout()
+                print("Shutting down at", message.author, "'s request") 
+            elif message.author.id not in adminList:
+                await client.send_message(message.channel, 'Error: You are not a bot admin, '+message.author.mention)
+                print(message.author, "tried to shutdown the bot but it not admin")
         
         #Command to ping the bot (again)
         elif message.content.startswith(prefix+'greet'):
