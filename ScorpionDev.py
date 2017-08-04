@@ -1,5 +1,5 @@
-import discord
-import asyncio
+import discord # Main Discord API
+import asyncio #
 import time
 #allows import of other python scripts
 from builtins import __import__
@@ -41,7 +41,6 @@ async def on_message(message):
         if message.content.startswith(prefix):
             commandString = message.content
             commandContents = commandString.split(' ', 1)[-1]
-            
         
         #Command to respond with "Pong!" (For testing)
         if message.content.startswith(prefix+'ping'):
@@ -68,13 +67,13 @@ async def on_message(message):
         
         #Command to link to a specified subreddit
         elif message.content.startswith(prefix+'reddit'):
-            await client.send_message(message.channel, 'https://www.reddit.com/r/'+commandContents)
+            await client.send_message(message.channel, 'https://www.reddit.com/r/' + commandContents)
             print("Linked to subreddit", commandContents, "at", message.author, "'s request")
           
         #Command to give information about the bot  
         elif message.content.startswith(prefix+'info'):
             await client.send_message(message.author, "Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at https://github.com/Alstro20/ScorpiusStingBot")
-            await client.send_message(message.channel, "Sent you a DM, "+message.author.mention)
+            await client.send_message(message.channel, "Sent you a DM, " + message.author.mention)
             print("Info sent to", message.author) 
             
         #Command to make the bot say whatever
@@ -88,7 +87,7 @@ async def on_message(message):
             print("Searched google for -", commandContents, "- at", message.author, "'s request")
             results = google_search(commandContents, APIKey, SearchEngineID, num = 3)
             for result in results:
-                await client.send_message(message.channel, '```' + result['link'] + '\n'+ result['snippet'] + '```') #TODO: make this concatenation not so clunky
+                await client.send_message(message.channel, '**<' + result['link'] + '>** \n' + '```' + result['snippet'] + '```') #TODO: make this concatenation not so clunky
                 
         #Lets user know if script is unknown. Put all commands before this.
         elif message.content.startswith(prefix):
