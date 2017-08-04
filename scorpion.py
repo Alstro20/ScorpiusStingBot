@@ -29,6 +29,11 @@ def google_search(query, api_key, cse_id, **kwargs):
     res = service.cse().list(q=query, cx=cse_id, **kwargs).execute()
     return res['items']
 
+def youtube_search(api_key, **kwargs):
+    service = build("youtube", "v3", developerKey=api_key)
+    res = service.search().list(**kwargs).execute()
+    return res['items']
+    
 #Bot comes online
 @client.event
 async def on_ready():
@@ -51,7 +56,16 @@ async def on_message(message):
         #Command to inform users how to use the bot (Help command)
         if message.content.startswith(prefix+'help'):
             print("Sending", message.author, "help.")
-            await client.send_message(message.author, '------------------------\n__**Commands**__\n\n`Ping`\nPings the bot and checks to see if it is online\n\n`greet`\nSay hello to the bot\n\n`invite`\nGenerate an invite link to the current channel\n\n`reddit`\nLink to a specific subreddit\n\n`info`\nGet info related to the bot\n\n`say`\nMake the bot say something\n\n`google`\nGoogle search for something\n------------------------')
+            await client.send_message(message.author, '------------------------\n__**Commands**__\n\n'
+                                      +'`Ping`\nPings the bot and checks to see if it is online\n\n'
+                                      +'`greet`\nSay hello to the bot\n\n'
+                                      +'`invite`\nGenerate an invite link to the current channel\n\n'
+                                      +'`reddit`\nLink to a specific subreddit\n\n'
+                                      +'`info`\nGet info related to the bot\n\n'
+                                      +'`say`\nMake the bot say something\n\n'
+                                      +'`google`\nGoogle search for something\n'
+                                      +'`youtube`\n Search YouTube for something\n'
+                                      +'------------------------')
             await client.send_message(message.channel, message.author.mention+', sent you a DM.')
         
         #Command to respond with "Pong!" (For testing)
@@ -107,6 +121,19 @@ async def on_message(message):
             for result in results:
                 resultsList.append('**<' + result['link'] + '>** \n' + '```' + result['snippet'] + '```') #TODO: make this concatenation not so clunky
             await client.send_message(message.channel,  message.author.mention + ', Google search results for `' + commandContents + '`:\n'+'**1.**  '+resultsList[0]+'**2.**  '+resultsList[1]+'**3.**  '+resultsList[2])
+            
+        elif message.content.startswith(prefix+'youtube'):
+            resultsList = []
+            results = youtube_search(APIKey, part = 'snippet', q = commandContents, type = 'video', maxResults=3)
+            for result in results:
+                resultsList.append('**<http://www.youtube.com/watch?v=' + result['id']['videoId'] + '>** \n' 
+                                   + '```' + result['snippet']['title'] + '\n'
+                                   + 'uploaded by ' + result['snippet']['channelTitle'] + '\n\n'
+                                   + result['snippet']['description'] + '```\n')
+            await client.send_message(message.channel, message.author.mention + ', Youtube search results for `' + commandContents + '`:\n'
+                                     + '**1.** ' + resultsList[0]
+                                     + '**2.** ' + resultsList[1]
+                                     + '**3.** ' + resultsList[2])
                 
         #Lets user know if script is unknown. Put all commands before this.
         elif message.content.startswith(prefix):
