@@ -18,6 +18,10 @@ client = discord.Client()
 print("Starting bot")
 
 prefix = 's!'
+adminPrefix = 's@'
+
+#List of users who are allowed to use admin commands
+adminList = ['211292458208854016','194525718300983296']
 
 
 def google_search(query, api_key, cse_id, **kwargs):
@@ -41,19 +45,32 @@ async def on_message(message):
         if message.content.startswith(prefix):
             commandString = message.content
             commandContents = commandString.split(' ', 1)[-1]
+            #React to the command with :scorpion:
+            await client.add_reaction(message, '🦂')
+            
+        #Command to inform users how to use the bot (Help command)
+        if message.content.startswith(prefix+'help'):
+            print("Sending", message.author, "help.")
+            await client.send_message(message.author, '------------------------\n__**Commands**__\n\n`Ping`\nPings the bot and checks to see if it is online\n\n`greet`\nSay hello to the bot\n\n`invite`\nGenerate an invite link to the current channel\n\n`reddit`\nLink to a specific subreddit\n\n`info`\nGet info related to the bot\n\n`say`\nMake the bot say something\n\n`google`\nGoogle search for something\n------------------------')
+            await client.send_message(message.channel, message.author.mention+', sent you a DM.')
         
         #Command to respond with "Pong!" (For testing)
-        if message.content.startswith(prefix+'ping'):
+        elif message.content.startswith(prefix+'ping'):
             await client.send_message(message.channel, 'Pong!')
-            print("Pong!", message.author)
+            #Pring "Pong!" alongside the user's username and ID
+            print("Pong!", message.author, message.author.id)
             
         #Command to shut down the bot
-        elif message.content.startswith(prefix+'shutdown'):
-            await client.send_message(message.channel, 'Shutting down...')
-            await client.change_presence(game=None,status=None,afk=False)
-            time.sleep(2) # sleep for 2 seconds before shutdown, just to make sure status changed correctly
-            await client.logout()
-            print("Shutting down at", message.author, "'s request") 
+        elif message.content.startswith(adminPrefix+'shutdown'):
+            if message.author.id in adminList:
+                await client.send_message(message.channel, 'Shutting down...')
+                await client.change_presence(game=None,status=None,afk=False)
+                time.sleep(2) # sleep for 2 seconds before shutdown, just to make sure status changed correctly
+                await client.logout()
+                print("Shutting down at", message.author, "'s request") 
+            elif message.author.id not in adminList:
+                await client.send_message(message.channel, 'Error: You are not a bot admin, '+message.author.mention)
+                print(message.author, "tried to shutdown the bot but it not admin")
         
         #Command to ping the bot (again)
         elif message.content.startswith(prefix+'greet'):
@@ -84,15 +101,20 @@ async def on_message(message):
             
         #Command to make the bot google search
         elif message.content.startswith(prefix+'google'):
+            resultsList = []
             print("Searched google for -", commandContents, "- at", message.author, "'s request")
-            await client.send_message(message.channel,  message.author.mention + ', Google search results for `' + commandContents + '`:')
             results = google_search(commandContents, APIKey, SearchEngineID, num = 3)
             for result in results:
-                await client.send_message(message.channel, '**<' + result['link'] + '>** \n' + '```' + result['snippet'] + '```') #TODO: make this concatenation not so clunky
+                resultsList.append('**<' + result['link'] + '>** \n' + '```' + result['snippet'] + '```') #TODO: make this concatenation not so clunky
+            await client.send_message(message.channel,  message.author.mention + ', Google search results for `' + commandContents + '`:\n'+'**1.**  '+resultsList[0]+'**2.**  '+resultsList[1]+'**3.**  '+resultsList[2])
                 
         #Lets user know if script is unknown. Put all commands before this.
         elif message.content.startswith(prefix):
-            await client.send_message(message.channel, 'Invalid Command')  
+            await client.send_message(message.channel, 'Invalid Command')
+            #Removes 🦂 emoji when invalid command
+            await client.remove_reaction(message, '🦂', client.user)
+            #Adds emoji when command is invalid
+            await client.add_reaction(message, '⛔')
 
         
 client.run(BotString)
