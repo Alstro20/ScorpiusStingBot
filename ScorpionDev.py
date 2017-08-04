@@ -47,9 +47,15 @@ async def on_message(message):
             commandContents = commandString.split(' ', 1)[-1]
             #React to the command with :scorpion:
             await client.add_reaction(message, '🦂')
+            
+        #Command to inform users how to use the bot (Help command)
+        if message.content.startswith(prefix+'help'):
+            print("Sending", message.author, "help.")
+            await client.send_message(message.author, '------------------------\n__**Commands**__\n\n`Ping`\nPings the bot and checks to see if it is online\n\n`greet`\nSay hello to the bot\n\n`invite`\nGenerate an invite link to the current channel\n\n`reddit`\nLink to a specific subreddit\n\n`info`\nGet info related to the bot\n\n`say`\nMake the bot say something\n\n`google`\nGoogle search for something\n------------------------')
+            await client.send_message(message.channel, message.author.mention+', sent you a DM.')
         
         #Command to respond with "Pong!" (For testing)
-        if message.content.startswith(prefix+'ping'):
+        elif message.content.startswith(prefix+'ping'):
             await client.send_message(message.channel, 'Pong!')
             #Pring "Pong!" alongside the user's username and ID
             print("Pong!", message.author, message.author.id)
