@@ -96,6 +96,10 @@ async def on_message(message):
         #Lets user know if script is unknown. Put all commands before this.
         elif message.content.startswith(prefix):
             await client.send_message(message.channel, 'Invalid Command')
+            #Removes 🦂 emoji when invalid command
+            await client.remove_reaction(message, '🦂', client.user)
+            #Adds emoji when command is invalid
+            await client.add_reaction(message, '⛔')
 
         
 client.run(BotString)
