@@ -57,13 +57,13 @@ async def on_message(message):
         if message.content.startswith(prefix+'help'):
             print("Sending", message.author, "help.")
             await client.send_message(message.author, '------------------------\n__**Commands**__\n\n'
-                                      +'`Ping`\nPings the bot and checks to see if it is online\n\n'
+                                      +'`ping`\nPings the bot and checks to see if it is online\n\n'
                                       +'`greet`\nSay hello to the bot\n\n'
                                       +'`invite`\nGenerate an invite link to the current channel\n\n'
                                       +'`reddit`\nLink to a specific subreddit\n\n'
                                       +'`info`\nGet info related to the bot\n\n'
                                       +'`say`\nMake the bot say something\n\n'
-                                      +'`google`\nGoogle search for something\n'
+                                      +'`google`\nGoogle search for something\n\n'
                                       +'`youtube`\n Search YouTube for something\n'
                                       +'------------------------')
             await client.send_message(message.channel, message.author.mention+', sent you a DM.')
