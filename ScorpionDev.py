@@ -85,6 +85,7 @@ async def on_message(message):
         #Command to make the bot google search
         elif message.content.startswith(prefix+'google'):
             print("Searched google for -", commandContents, "- at", message.author, "'s request")
+            await client.send_message(message.channel,  message.author.mention + ', Google search results for `' + commandContents + '`:')
             results = google_search(commandContents, APIKey, SearchEngineID, num = 3)
             for result in results:
                 await client.send_message(message.channel, '**<' + result['link'] + '>** \n' + '```' + result['snippet'] + '```') #TODO: make this concatenation not so clunky
