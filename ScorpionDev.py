@@ -41,6 +41,8 @@ async def on_message(message):
         if message.content.startswith(prefix):
             commandString = message.content
             commandContents = commandString.split(' ', 1)[-1]
+            #React to the command with :scorpion:
+            await client.add_reaction(message, '🦂')
         
         #Command to respond with "Pong!" (For testing)
         if message.content.startswith(prefix+'ping'):
@@ -84,15 +86,16 @@ async def on_message(message):
             
         #Command to make the bot google search
         elif message.content.startswith(prefix+'google'):
+            resultsList = []
             print("Searched google for -", commandContents, "- at", message.author, "'s request")
-            await client.send_message(message.channel,  message.author.mention + ', Google search results for `' + commandContents + '`:')
             results = google_search(commandContents, APIKey, SearchEngineID, num = 3)
             for result in results:
-                await client.send_message(message.channel, '**<' + result['link'] + '>** \n' + '```' + result['snippet'] + '```') #TODO: make this concatenation not so clunky
+                resultsList.append('**<' + result['link'] + '>** \n' + '```' + result['snippet'] + '```') #TODO: make this concatenation not so clunky
+            await client.send_message(message.channel,  message.author.mention + ', Google search results for `' + commandContents + '`:\n'+'**1.**  '+resultsList[0]+'**2.**  '+resultsList[1]+'**3.**  '+resultsList[2])
                 
         #Lets user know if script is unknown. Put all commands before this.
         elif message.content.startswith(prefix):
-            await client.send_message(message.channel, 'Invalid Command')  
+            await client.send_message(message.channel, 'Invalid Command')
 
         
 client.run(BotString)
