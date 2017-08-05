@@ -142,12 +142,13 @@ async def on_message(message):
         elif message.content.startswith(prefix+'cat') or message.content.startswith(prefix+'🐱'):
             print("Cat image requested by", message.author)
             await client.send_typing(message.channel)
-            #reacts to the cat command with a 🐱 emoji
-            await client.add_reaction(message, '🐱')
             randomCat = cat.getCat(directory=None, filename=None, format='png')
             await client.send_file(message.channel, randomCat)
+            #reacts to the cat command with a 🐱 emoji
+            await client.add_reaction(message, '🐱')
             #delete the cat picture after sending it
             os.remove(randomCat)
+            print("Sent cat image at", message.author, "'s request. -", randomCat)
             
                             
         #Lets user know if script is unknown. Put all commands before this.
