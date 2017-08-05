@@ -60,14 +60,15 @@ async def on_message(message):
         if message.content.startswith(prefix+'help'):
             print("Sending", message.author, "help.")
             await client.send_message(message.author, '------------------------\n__**Commands**__\n\n'
-                                      +'`Ping`\nPings the bot and checks to see if it is online\n\n'
-                                      +'`greet`\nSay hello to the bot\n\n'
-                                      +'`invite`\nGenerate an invite link to the current channel\n\n'
-                                      +'`reddit`\nLink to a specific subreddit\n\n'
+                                      +'`cat`\nFinds a random image of a cat\n\n'
                                       +'`info`\nGet info related to the bot\n\n'
+                                      +'`invite`\nGenerate an invite link to the current channel\n\n'
+                                      +'`greet`\nSay hello to the bot\n\n'
+                                      +'`google`\nGoogle search for something\n\n'
+                                      +'`ping`\nPings the bot and checks to see if it is online\n\n'
+                                      +'`reddit`\nLink to a specific subreddit\n\n'
                                       +'`say`\nMake the bot say something\n\n'
-                                      +'`google`\nGoogle search for something\n'
-                                      +'`youtube`\n Search YouTube for something\n'
+                                      +'`youtube`\n Search YouTube for something\n' # TODO: Add another line break if there were to be another command after youtube
                                       +'------------------------')
             await client.send_message(message.channel, message.author.mention+', sent you a DM.')
         
@@ -140,9 +141,9 @@ async def on_message(message):
             
         #Command to display a random cat
         elif message.content.startswith(prefix+'cat') or message.content.startswith(prefix+'🐱'):
-            print("Cat image requested by", message.author)
+            print("Fetching cat image requested by", message.author)
             await client.send_typing(message.channel)
-            randomCat = cat.getCat(directory=None, filename=None, format='png')
+            randomCat = cat.getCat(directory=None, filename=None, format='jpg')
             await client.send_file(message.channel, randomCat)
             #reacts to the cat command with a 🐱 emoji
             await client.add_reaction(message, '🐱')
