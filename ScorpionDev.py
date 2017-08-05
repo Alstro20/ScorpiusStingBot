@@ -1,9 +1,12 @@
 import discord # Main Discord API
-import asyncio #
+import asyncio 
+import cat #Random cat api
+import os #OS API to create/delete files
 import time
 #allows import of other python scripts
 from builtins import __import__
 from _ast import Await
+from cat import getCat
 __import__
 from googleapiclient.discovery import build
 
@@ -134,7 +137,19 @@ async def on_message(message):
                                      + '**1.** ' + resultsList[0]
                                      + '**2.** ' + resultsList[1]
                                      + '**3.** ' + resultsList[2])
-                
+            
+        #Command to display a random cat
+        elif message.content.startswith(prefix+'cat') or message.content.startswith(prefix+'🐱'):
+            print("Cat image requested by", message.author)
+            await client.send_typing(message.channel)
+            #reacts to the cat command with a 🐱 emoji
+            await client.add_reaction(message, '🐱')
+            randomCat = cat.getCat(directory=None, filename=None, format='png')
+            await client.send_file(message.channel, randomCat)
+            #delete the cat picture after sending it
+            os.remove(randomCat)
+            
+                            
         #Lets user know if script is unknown. Put all commands before this.
         elif message.content.startswith(prefix):
             await client.send_message(message.channel, 'Invalid Command')
