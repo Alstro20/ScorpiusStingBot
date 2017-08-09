@@ -110,8 +110,11 @@ async def on_message(message):
           
         #Command to give information about the bot  
         elif message.content.startswith(prefix+'info') or message.content.startswith(prefix.upper()+'info'):
-            await client.send_message(message.author, 'Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at <https://goo.gl/1SAbnr>'
-                                      +'\nAlso you should come hang out with us. http://discord.gg/vuT5xc8')
+            serverCount = len(client.servers)
+            await client.send_message(message.author, 'Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at <https://github.com/Alstro20/ScorpionBot>'
+                                      +'\nOfficial Discord server: http://discord.gg/vuT5xc8'
+                                      +'\n__**Statistics**__:'
+                                      +'\n\nScorpion is currently part of '+str(serverCount - 2)+' servers (This number might be broken)') #serverCount - 2 to compensate for our 2 private testing servrs.
             await client.send_message(message.channel, "Sent you a DM, " + message.author.mention)
             print("Info sent to", message.author) 
             
@@ -194,6 +197,7 @@ async def on_message(message):
                 currentGame = commandContents
                 print("Changing current game to", commandContents, "at the admin request of", message.author)
                 await client.change_presence(game=discord.Game(name=currentGame), status=None, afk=False,)
+                client.delete_message(message) #NOT SURE WHY NOT WORKING
                 
                 
             #User failed to authenticate (PUT ALL ADMIN COMMANDS BEFORE THIS)
