@@ -3,6 +3,7 @@ import asyncio
 import cat #Random cat api
 import os #OS API to create/delete files
 import time
+import requests
 from threading import Thread
 #allows import of other python scripts
 from builtins import __import__
@@ -15,7 +16,7 @@ from googleapiclient.discovery import build
 
 #import other python scripts
 import key
-from key import BotString, APIKey, SearchEngineID
+from key import BotString, APIKey, SearchEngineID, BotID, DBotsToken
 
 
 client = discord.Client()
@@ -29,6 +30,9 @@ adminPrefix = 's@'
 #List of users who are allowed to use admin commands
 adminList = ['211292458208854016','194525718300983296']
 
+#List of all valid commands
+commandList = ['cat','🐱','info','invite','greet','google','ping','poll','strawpoll','say','youtube','lmgtfy','LMGTFY','shutdown','changeGame','updateGuilds']
+
 
 def google_search(query, api_key, cse_id, **kwargs):
     service = build("customsearch", "v1", developerKey=api_key)
@@ -39,6 +43,21 @@ def youtube_search(api_key, **kwargs):
     service = build("youtube", "v3", developerKey=api_key)
     res = service.search().list(**kwargs).execute()
     return res['items']
+
+def updateGuilds():
+    serverCount = len(client.servers)
+    requests.request(
+        'POST',
+                    
+        'https://discordbots.org/api/bots/'+BotID+'/stats',
+        headers={
+            'authorization': DBotsToken
+        },
+        data = {
+            'server_count': serverCount
+        }
+    )
+    print("GUILD COUNT UPDATED ON discordbots.org")
     
 #Bot comes online
 @client.event
@@ -46,10 +65,14 @@ async def on_ready():
     print('Logging in as')
     print(client.user.name)
     print(client.user.id)
-    print('------------')
     
     #Set the bot's game to 's!help' on startup
     await client.change_presence(game=discord.Game(name='s!help'), status=None, afk=False,)
+    serverCount = len(client.servers)
+    updateGuilds()
+    print("Running in", str(serverCount), "servers.")
+    
+    print('------------')
    
 #[---COMMANDS---]
 @client.event
@@ -60,9 +83,22 @@ async def on_message(message):
         #Command's contents are stored in commandContents
         if message.content.startswith(prefix) or message.content.startswith(prefix.upper()) or message.content.startswith(adminPrefix) or message.content.startswith(adminPrefix.upper()):
             commandString = message.content
+            
+            #String that stores the command (after prefix and before first space)
+            #remove the commandContents
+            command = commandString.split(' ', 1)[0]
+            #remove the prefix
+            command = command.split('!', 1)[-1]
+            
+            #String that stores the command's contents (after first space)
             commandContents = commandString.split(' ', 1)[-1]
-            #React to the command with :scorpion:
-            await client.add_reaction(message, '🦂')
+            
+            #Checks if command is valid or not
+            if command in commandList:
+                await client.add_reaction(message, '🦂')
+            else:
+                print(message.author, "ran an invalid command", command)
+            
             
             
         #Command to inform users how to use the bot (Help command)
@@ -74,6 +110,7 @@ async def on_message(message):
                                       +'`invite`\nInvite people to the current channel, or invite Scorpion Bot to your server.\n\n'
                                       +'`greet`\nSay hello to the bot\n\n'
                                       +'`google <Search contents>`\nGoogle search for something\n\n'
+                                      +'`lmgtfy <Search contents>`\nGets a LMGTFY (Let me google that for you) link\n\n'
                                       +'`ping`\nPings the bot and checks to see if it is online\n\n'
                                       +'`poll <Poll contents>`\n Create a poll to let users vote\n\n'
                                       +'`reddit <Subreddit>`\nLink to a specific subreddit\n\n'
@@ -114,7 +151,7 @@ async def on_message(message):
             await client.send_message(message.author, 'Scorpion bot is a little bot made by Alstro20 and EmeraldOrbis. Check out the Github project at <https://github.com/Alstro20/ScorpionBot>'
                                       +'\nOfficial Discord server: http://discord.gg/vuT5xc8'
                                       +'\n__**Statistics**__:'
-                                      +'\n\nScorpion is currently part of '+str(serverCount - 2)+' servers (This number might be broken)') #serverCount - 2 to compensate for our 2 private testing servrs.
+                                      +'\n\nScorpion is currently part of '+str(serverCount)+' servers.') #serverCount - 2 to compensate for our 2 private testing servrs.
             await client.send_message(message.channel, "Sent you a DM, " + message.author.mention)
             print("Info sent to", message.author) 
             
@@ -199,20 +236,16 @@ async def on_message(message):
                 await client.change_presence(game=discord.Game(name=currentGame), status=None, afk=False,)
                 client.delete_message(message) #NOT SURE WHY NOT WORKING
                 
+            elif message.content.startswith(adminPrefix+'updateGuilds'):
+                updateGuilds()
+                print("Updating Guilds at", message.author, "'s request")
+
+                
                 
             #User failed to authenticate (PUT ALL ADMIN COMMANDS BEFORE THIS)
             elif message.author.id not in adminList:
                     await client.send_message(message.channel, 'Error: You are not a bot admin, '+message.author.mention)
                     print(message.author, "tried to shutdown the bot but it not admin")
             
-                            
-        #Lets user know if script is unknown. Put all commands before this.
-        elif message.content.startswith(prefix):
-            await client.send_message(message.channel, 'Invalid Command')
-            #Removes 🦂 emoji when invalid command
-            await client.remove_reaction(message, '🦂', client.user)
-            #Adds emoji when command is invalid
-            await client.add_reaction(message, '⛔')
-
         
 client.run(BotString)
